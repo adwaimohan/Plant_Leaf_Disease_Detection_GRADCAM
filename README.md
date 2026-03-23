@@ -116,13 +116,6 @@ streamlit run app.py
 
 ---
 
-## 📈 Example Output
-
-* Prediction: Tomato Early Blight
-* Confidence: 97.45%
-* Heatmap: Highlights infected region
-
----
 
 ## 📖 Notes
 
