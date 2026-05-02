@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crop Disease Detection — AI Powered Analysis</title>
+  <meta name="description" content="Upload a crop leaf image to detect diseases using AI with GradCAM explainability.">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <!-- Animated background blobs -->
+  <div class="bg-blob blob-1"></div>
+  <div class="bg-blob blob-2"></div>
+  <div class="bg-blob blob-3"></div>
+
+  <div class="container">
+    <!-- Header -->
+    <header id="app-header">
+      <div class="logo">
+        <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+          <circle cx="18" cy="18" r="16" stroke="url(#g1)" stroke-width="2.5" />
+          <path d="M18 8c0 8-6 12-6 18h12c0-6-6-10-6-18z" fill="url(#g1)" opacity=".85" />
+          <defs>
+            <linearGradient id="g1" x1="0" y1="0" x2="36" y2="36">
+              <stop stop-color="#34d399" />
+              <stop offset="1" stop-color="#06b6d4" />
+            </linearGradient>
+          </defs>
+        </svg>
+        <h1> Crop Guard <span class="ai-badge">AI</span></h1>
+      </div>
+      <p class="tagline">Upload a leaf image — get instant disease diagnosis &amp; visual explanation</p>
+    </header>
+
+    <!-- Upload Section -->
+    <section id="upload-section">
+      <div id="drop-zone" class="drop-zone">
+        <div class="drop-zone-inner">
+          <svg class="upload-icon" width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+            <polyline points="17 8 12 3 7 8" />
+            <line x1="12" y1="3" x2="12" y2="15" />
+          </svg>
+          <p class="drop-text">Drag &amp; drop your leaf image here</p>
+          <p class="drop-subtext">or click to browse &bull; JPG, PNG, BMP, WebP</p>
+        </div>
+        <input type="file" id="file-input" accept=".jpg,.jpeg,.png,.bmp,.webp" hidden>
+      </div>
+    </section>
+
+    <!-- Preview & Analyze -->
+    <section id="preview-section" class="hidden">
+      <div class="preview-card glass-card">
+        <img id="preview-image" alt="Uploaded leaf preview">
+        <div class="preview-info">
+          <span id="file-name"></span>
+          <button id="change-btn" class="btn-ghost">Change image</button>
+        </div>
+      </div>
+      <button id="analyze-btn" class="btn-primary">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8" />
+          <line x1="21" y1="21" x2="16.65" y2="16.65" />
+        </svg>
+        Analyze Leaf
+      </button>
+    </section>
+
+    <!-- Loading -->
+    <section id="loading-section" class="hidden">
+      <div class="loader-container glass-card">
+        <div class="spinner"></div>
+        <p class="loader-text">Analyzing leaf with AI model…</p>
+        <p class="loader-sub">Running EfficientNet-B0 + GradCAM</p>
+      </div>
+    </section>
+
+    <!-- Results -->
+    <section id="results-section" class="hidden">
+      <h2 class="section-title">Analysis Results</h2>
+
+      <div class="results-grid">
+        <!-- Images comparison -->
+        <div class="images-row">
+          <div class="image-card glass-card">
+            <h3>Original Image</h3>
+            <img id="result-original" alt="Original leaf image">
+          </div>
+          <div class="image-card glass-card gradcam-card">
+            <h3>GradCAM Heatmap</h3>
+            <img id="result-gradcam" alt="GradCAM heatmap overlay">
+            <p class="heatmap-hint">Warm regions = high model focus</p>
+          </div>
+        </div>
+
+        <!-- Diagnosis -->
+        <div class="diagnosis-card glass-card">
+          <div class="diagnosis-header">
+            <span class="diagnosis-label">Primary Diagnosis</span>
+            <span id="diagnosis-confidence" class="confidence-pill"></span>
+          </div>
+          <h3 id="diagnosis-name"></h3>
+        </div>
+
+        <!-- Top predictions -->
+        <div class="predictions-card glass-card">
+          <h3>Top Predictions</h3>
+          <div id="predictions-list"></div>
+        </div>
+      </div>
+
+      <button id="new-analysis-btn" class="btn-primary" style="margin-top:2rem;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="1 4 1 10 7 10" />
+          <path d="M3.51 15a9 9 0 100-6.97L1 10" />
+        </svg>
+        New Analysis
+      </button>
+    </section>
+
+    <!-- Error -->
+    <section id="error-section" class="hidden">
+      <div class="error-card glass-card">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#f87171" stroke-width="2">
+          <circle cx="12" cy="12" r="10" />
+          <line x1="15" y1="9" x2="9" y2="15" />
+          <line x1="9" y1="9" x2="15" y2="15" />
+        </svg>
+        <p id="error-message"></p>
+        <button id="retry-btn" class="btn-ghost">Try Again</button>
+      </div>
+    </section>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+
+</html>
